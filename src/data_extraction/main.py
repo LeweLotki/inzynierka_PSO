@@ -1,20 +1,20 @@
-import cv2
+from os import path, listdir
+from reader import file_types, read_image_and_write
 
-def display_image(file_path):
+folder_path = '../../foto/'
+used_photo_file = folder_path + 'used_photo.txt'
 
-  image = cv2.imread(file_path)
+if __name__ == "__main__":
 
-  if image is None:
-    print(f"Error: Unable to open image at'{file_path}'")
-    return
+    new_photos_found = False
 
-  cv2.imshow('Image', image)
-
-  cv2.waitKey(0)
-  cv2.destroyAllWindows()
-
-if __name__ =="__main__":
-
-  file_path = '../../foto/image_20_0x_00175_22_6.png'
-  display_image(file_path)
- 
+    for filename in listdir(folder_path):
+        if filename.endswith(file_types):
+            file_path = path.join(folder_path, filename)
+            img, new_photo_flag = read_image_and_write(file_path, used_photo_file)
+            if new_photo_flag: new_photos_found = True
+            
+    if new_photos_found:
+        print(f"Processing completed. Names of successfully opened images written to {used_photo_file}")
+    else:
+        print("No new photos found.")
