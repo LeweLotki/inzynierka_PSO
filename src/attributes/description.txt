@@ -1,0 +1,5 @@
+This program has been written in order to conduct
+simulation of particles motion based on vision data.
+
+All the data, data analysis and machine learning models
+are available in this repository.
