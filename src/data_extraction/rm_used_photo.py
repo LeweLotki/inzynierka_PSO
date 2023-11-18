@@ -1,7 +1,9 @@
 from os import path, remove
 
+# this is not part of the module
+
 def rm_used_photo():
-    used_photo_file = '../../foto/used_photo.txt'
+    used_photo_file = '../foto/used_photo.txt'
 
     if path.exists(used_photo_file):
         remove(used_photo_file)

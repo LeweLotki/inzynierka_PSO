@@ -1,7 +1,7 @@
 from os import path, listdir
-from reader import file_types, read_image_and_write
+from data_extraction.reader import file_types, read_image_and_write
 
-folder_path = '../../foto/'
+folder_path = '../foto/'
 used_photo_file = folder_path + 'used_photo.txt'
 
 def run_extraction():
@@ -18,5 +18,3 @@ def run_extraction():
         print(f"Processing completed. Names of successfully opened images written to {used_photo_file}")
     else:
         print("No new photos found.")
-        
-if __name__ == "__main__": run_extraction()

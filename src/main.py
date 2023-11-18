@@ -1,3 +1,5 @@
+from data_extraction.run_extraction import run_extraction
+from data_analysis.run_analysis import run_analysis
 import argparse
 
 def default_message():
@@ -20,6 +22,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Check which option was provided and execute the corresponding function
-    if args.a: pass
-    elif args.e: pass
+    if args.a: run_analysis()
+    elif args.e: run_extraction()
     else: default_message()
