@@ -1,3 +1,4 @@
 *.log
 foto/
 __pycache__/
+*.pyc

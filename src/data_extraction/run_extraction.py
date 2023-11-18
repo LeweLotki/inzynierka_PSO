@@ -4,7 +4,7 @@ from reader import file_types, read_image_and_write
 folder_path = '../../foto/'
 used_photo_file = folder_path + 'used_photo.txt'
 
-if __name__ == "__main__":
+def run_extraction():
 
     new_photos_found = False
 
@@ -18,3 +18,5 @@ if __name__ == "__main__":
         print(f"Processing completed. Names of successfully opened images written to {used_photo_file}")
     else:
         print("No new photos found.")
+        
+if __name__ == "__main__": run_extraction()
