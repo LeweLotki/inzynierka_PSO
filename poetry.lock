@@ -4067,12 +4067,12 @@ wrapt = ">=1.11.0"
 
 [[package]]
 name = "tensorflow-estimator"
-version = "2.15.0"
+version = "2.6.0"
 description = "TensorFlow Estimator."
 optional = false
-python-versions = ">=3.7"
+python-versions = "*"
 files = [
-    {file = "tensorflow_estimator-2.15.0-py2.py3-none-any.whl", hash = "sha256:aedf21eec7fb2dc91150fc91a1ce12bc44dbb72278a08b58e79ff87c9e28f153"},
+    {file = "tensorflow_estimator-2.6.0-py2.py3-none-any.whl", hash = "sha256:cf78528998efdb637ac0abaf525c929bf192767544eb24ae20d9266effcf5afd"},
 ]
 
 [[package]]
@@ -4681,4 +4681,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "3.10.2"
-content-hash = "a9bbf0d54842b35da1d3a493d77c80232dee63b0735bba5c6902c886ceec193a"
+content-hash = "713eb4052dff017fa18fae58a1b82021aaaf424612185eee7e2a5f0d5278815f"
