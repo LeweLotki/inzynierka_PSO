@@ -4076,6 +4076,20 @@ files = [
 ]
 
 [[package]]
+name = "tensorflow-hub"
+version = "0.15.0"
+description = "TensorFlow Hub is a library to foster the publication, discovery, and consumption of reusable parts of machine learning models."
+optional = false
+python-versions = "*"
+files = [
+    {file = "tensorflow_hub-0.15.0-py2.py3-none-any.whl", hash = "sha256:8af12cb2d1fc0d1a9509a620e7589daf173714e99f08aaf090a4748ff20b45c8"},
+]
+
+[package.dependencies]
+numpy = ">=1.12.0"
+protobuf = ">=3.19.6"
+
+[[package]]
 name = "tensorflow-io-gcs-filesystem"
 version = "0.25.0"
 description = "TensorFlow IO"
@@ -4667,4 +4681,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "3.10.2"
-content-hash = "f629b2cbc1d3fa973e8d4a84fd07c4c4c4b49f7cae233656f8a6bf44093e94e5"
+content-hash = "a9bbf0d54842b35da1d3a493d77c80232dee63b0735bba5c6902c886ceec193a"
