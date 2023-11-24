@@ -14,18 +14,21 @@ from cv2 import (
     calcHist, connectedComponents, dilate, erode, connectedComponentsWithStats, kmeans, cvtColor
 )
 
-from pandas import (
-    DataFrame
-)
+from pandas import DataFrame
+
+from os import path
 
 class feature_extraction:
     
     num_clusters = 3
     kernel_size = 2
+    csv_folder_path = r'..\\data\\'
     
-    def __init__(self, image: ndarray):
+    def __init__(self, image: ndarray, image_name: str):
         
         self.image = image
+        self.image_name = image_name
+        
         self.decrease_variety_of_intensity ()
         self.remove_adjacent_colors()
         self.closing_morphology()
@@ -124,11 +127,12 @@ class feature_extraction:
     def write_csv(self, object_info: list):
             
         df = DataFrame(object_info)
-        df.to_csv('object_info.csv', index=False)
+        filename, _ = path.splitext(self.image_name)
+        df.to_csv(self.csv_folder_path + filename + '.csv', index=False)
         
 if __name__ == '__main__':
     
     file_path = r'..\..\foto\image_20_0x_00175_22_6.png'
     from cv2 import imread
     image = imread(file_path)
-    feature_extraction(image)
+    feature_extraction(image=image, image_name='1')
