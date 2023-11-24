@@ -1,7 +1,7 @@
 from os import path
 from cv2 import imread
 
-file_types = ('.png', '.jpg', '.jpeg')
+file_types = ('.png', '.jpg', '.jpeg', '.bmp')
 
 def read_image_and_write(file_path: str, output_file: str) -> tuple:
     
