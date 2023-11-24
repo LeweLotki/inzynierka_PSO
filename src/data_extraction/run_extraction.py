@@ -1,7 +1,15 @@
-from os import path, listdir
+from os import (
+    path, listdir
+)
 
-from data_extraction.reader import file_types, read_image_and_write
+from data_extraction.reader import (
+    file_types, read_image_and_write
+)
+# from data_extraction.feature_extraction import feature_extraction
+
 from data_extraction.feature_extraction import feature_extraction
+
+from numpy import ndarray
 
 folder_path = '../foto/'
 used_photo_file = folder_path + 'used_photo.txt'
@@ -14,7 +22,7 @@ def run_extraction():
         if filename.endswith(file_types):
             file_path = path.join(folder_path, filename)
             img, new_photo_flag = read_image_and_write(file_path, used_photo_file)
-            feature_extraction(img)
+            if type(img) == ndarray: feature_extraction(image=img, image_name=filename)
             if new_photo_flag: new_photos_found = True
             
     if new_photos_found:
