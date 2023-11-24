@@ -1,6 +1,6 @@
-from os import path, remove
-
-# this is not part of the module
+from os import (
+    remove, path
+)
 
 def rm_used_photo():
     used_photo_file = '../foto/used_photo.txt'

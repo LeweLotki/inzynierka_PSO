@@ -1,59 +1,134 @@
 from numpy import (
-    ndarray, max
+    ndarray, float32, uint8
 )
+
+from numpy import (
+    argmax, zeros_like, ones, any
+)
+
 from cv2 import (
-    imread, imshow, waitKey, destroyAllWindows, 
-    cvtColor, COLOR_BGR2GRAY, calcHist, GaussianBlur
-)
-from matplotlib.pyplot import (
-    plot, title, xlabel, ylabel, show,
-    subplot, axis, tight_layout, subplots
+    TERM_CRITERIA_EPS, TERM_CRITERIA_MAX_ITER, KMEANS_RANDOM_CENTERS, CC_STAT_AREA, COLOR_BGR2GRAY
 )
 
-def display_histogram(img : ndarray) -> None: 
+from cv2 import (
+    calcHist, connectedComponents, dilate, erode, connectedComponentsWithStats, kmeans, cvtColor
+)
+
+from pandas import (
+    DataFrame
+)
+
+class feature_extraction:
     
-    histogram = calcHist([img], [0], None, [256], [0, 256])
+    num_clusters = 3
+    kernel_size = 2
     
-    _, axs = subplots(1, 2, figsize=(10, 5))
+    def __init__(self, image: ndarray):
+        
+        self.image = image
+        self.decrease_variety_of_intensity ()
+        self.remove_adjacent_colors()
+        self.closing_morphology()
+        object_info = self.count_objects()
+        self.write_csv(object_info=object_info)
+           
+    def decrease_variety_of_intensity (self):
+        
+        image = self.image
+        image = cvtColor(image, COLOR_BGR2GRAY)
+        
+        pixels = image.reshape((-1, 3))
+        pixels = float32(pixels)
 
-    # Display the image in the first subplot
-    axs[0].imshow(img / max(img), cmap='gray', vmin=0, vmax=1)
-    axs[0].set_title('Image')
-    axs[0].axis('off')
+        criteria = (TERM_CRITERIA_EPS + TERM_CRITERIA_MAX_ITER, 100, 0.2)
+        _, labels, centers = kmeans(pixels, self.num_clusters, None, criteria, 10, KMEANS_RANDOM_CENTERS)
 
-    # Display the histogram in the second subplot
-    axs[1].plot(histogram)
-    axs[1].set_title('Image Histogram')
-    axs[1].set_xlabel('Pixel Value')
-    axs[1].set_ylabel('Frequency')
+        centers = uint8(centers)
+        segmented_image = centers[labels.flatten()]
+        segmented_image = segmented_image.reshape(image.shape)
 
-    tight_layout()
-
-
-def feature_extraction(img : ndarray) -> ndarray: 
-
-    # Step 1: Convert the image to black and white
-    img = cvtColor(img, COLOR_BGR2GRAY)  
+        self.image = segmented_image
     
-    display_histogram(img)
-    
-    img = GaussianBlur(img, (5, 5), 0)
-    
-    display_histogram(img)
-    
-    return img
+    def remove_adjacent_colors(self):
+        
+        gray_image = self.image
+        
+        hist = calcHist([gray_image], [0], None, [256], [0, 256])
 
+        highest_intensity = argmax(hist)
+        hist[highest_intensity] = 0  
+        middle_intensity = argmax(hist)
+        hist[middle_intensity] = 0  
+        lowest_intensity = argmax(hist)
+
+        high_intensity_mask = (gray_image == highest_intensity)
+        middle_intensity_mask = (gray_image == middle_intensity)
+        lowest_intensity_mask = (gray_image == lowest_intensity)
+
+        result = zeros_like(gray_image, dtype=uint8)
+        result[high_intensity_mask] = 0
+        result[middle_intensity_mask] = 255
+        result[lowest_intensity_mask] = 255
+                
+        _, middle_labels = connectedComponents(middle_intensity_mask.astype(uint8))
+
+        for label in range(1, middle_labels.max() + 1):
+            
+            current_component_mask = (middle_labels == label)
+            dilated_mask = dilate(current_component_mask.astype(uint8), ones((3, 3), uint8))
+
+            if any(dilated_mask & lowest_intensity_mask):
+                result[current_component_mask] = 0
+
+        self.image = result
+    
+    def closing_morphology(self):
+
+        kernel = ones((self.kernel_size, self.kernel_size), uint8)
+        
+        binary_image = self.image
+        
+        dilated_image = dilate(binary_image, kernel, iterations=1)
+        eroded_image = erode(dilated_image, kernel, iterations=1)
+        corrected_image = dilate(eroded_image, kernel, iterations=1)
+
+        self.image = corrected_image
+    
+    def count_objects(self) -> list:
+        
+        binary_image = self.image
+        
+        _, _, stats, centroids = connectedComponentsWithStats(binary_image)
+
+        num_objects = len(stats) - 1  
+
+        object_info = []
+
+        for i in range(1, len(stats)):
+            area = stats[i, CC_STAT_AREA]
+            x, y, width, height, _ = stats[i]
+            centroid = (int(centroids[i, 0]), int(centroids[i, 1]))
+            
+            top_left = (x, y)
+            bottom_right = (x + width, y + height)
+
+            object_info.append({
+                'id': i,
+                'area': area,
+                'centroid': centroid,
+                'rectangle': (top_left, bottom_right)
+            })
+
+        return object_info
+    
+    def write_csv(self, object_info: list):
+            
+        df = DataFrame(object_info)
+        df.to_csv('object_info.csv', index=False)
+        
 if __name__ == '__main__':
     
-    input_image = imread("..\\..\\foto\\image_20_0x_00175_22_6.png")
-
-# Call the feature_extraction function
-    result_image = feature_extraction(input_image)
-
-    # Display the original and processed images for comparison
-    # imshow('Original Image', input_image)
-    # imshow('Processed Image', result_image)
-    show()
-    waitKey(0)
-    destroyAllWindows()
-
+    file_path = r'..\..\foto\image_20_0x_00175_22_6.png'
+    from cv2 import imread
+    image = imread(file_path)
+    feature_extraction(image)
