@@ -5,7 +5,6 @@ from os import (
 from data_extraction.reader import (
     file_types, read_image_and_write
 )
-# from data_extraction.feature_extraction import feature_extraction
 
 from data_extraction.feature_extraction import feature_extraction
 

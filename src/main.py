@@ -9,26 +9,32 @@ def default_message():
     
     print("\r No option specified. \n\r Type '--help' for list of arguments.")
 
+def get_description(path: str) -> str:
+    
+    with open(path, 'r', encoding='utf-8') as file:
+        description = file.read().strip()
+        return description
+    
 if __name__ == "__main__":
     
     description_path = './attributes/description.txt'
-    with open(description_path, 'r') as file:
-        program_description = file.read().strip()
+    data_analysis_description_path = './attributes/data_analysis_description.txt' 
+    data_extraction_description_path = './attributes/data_extraction_description.txt'
+
+    program_description = get_description(path=description_path)
+    data_analysis_description = get_description(path=data_analysis_description_path)
+    data_extraction_description = get_description(path=data_extraction_description_path)
     
     notebook_directory = './data_analysis/notebooks'
     available_notebooks = [file for file in listdir(notebook_directory) if file.endswith('.ipynb')]
     
     parser = ArgumentParser(description=program_description)
+    
+    parser.add_argument('-a', '--notebook', help=data_analysis_description + f' {", ".join(available_notebooks)}')
+    parser.add_argument('-e', action='store_true', help=data_extraction_description)
 
-    # Define command-line options
-    parser.add_argument('-a', '--notebook', help=f'Specify the Jupyter Notebook file containing data analysis. '
-                                                 f'Possible values: {", ".join(available_notebooks)}')
-    parser.add_argument('-e', action='store_true', help='extracting features from photos of particles and writes the results to CSV files.')
-
-    # Parse command-line arguments
     args = parser.parse_args()
-
-    # Check which option was provided and execute the corresponding function
+    
     if args.notebook: run_analysis(args.notebook)
     elif args.e: run_extraction()
     else: default_message()

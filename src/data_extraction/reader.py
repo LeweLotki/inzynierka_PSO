@@ -8,14 +8,12 @@ def read_image_and_write(file_path: str, output_file: str) -> tuple:
     _, filename = path.split(file_path)
     
     if not path.isfile(output_file):
-        # If used_photo.txt doesn't exist, create an empty file
         open(output_file, 'a').close()
     
     with open(output_file, 'r') as file:
         used_photos = file.read().splitlines()
 
     if filename in used_photos:
-        # File name already exists in used_photo.txt
         return None, False
     else: print(f"'{filename}' \n")
 

@@ -103,8 +103,6 @@ class feature_extraction:
         
         _, _, stats, centroids = connectedComponentsWithStats(binary_image)
 
-        num_objects = len(stats) - 1  
-
         object_info = []
 
         for i in range(1, len(stats)):
@@ -129,10 +127,3 @@ class feature_extraction:
         df = DataFrame(object_info)
         filename, _ = path.splitext(self.image_name)
         df.to_csv(self.csv_folder_path + filename + '.csv', index=False)
-        
-if __name__ == '__main__':
-    
-    file_path = r'..\..\foto\image_20_0x_00175_22_6.png'
-    from cv2 import imread
-    image = imread(file_path)
-    feature_extraction(image=image, image_name='1')
