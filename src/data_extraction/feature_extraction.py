@@ -18,11 +18,13 @@ from pandas import DataFrame
 
 from os import path
 
+from config import paths
+
 class feature_extraction:
     
     num_clusters = 3
     kernel_size = 2
-    csv_folder_path = r'..\\data\\'
+    csv_folder_path = paths.csv_folder_path
     
     def __init__(self, image: ndarray, image_name: str):
         

@@ -4683,6 +4683,16 @@ files = [
 ]
 
 [[package]]
+name = "ypstruct"
+version = "0.0.2"
+description = "A simple and easy-to-use C/C++/MATLAB-like structure type for Python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "ypstruct-0.0.2.tar.gz", hash = "sha256:26143a45978083849bff2c373041c96ae9dbfa226164e82fb51ec966065f8361"},
+]
+
+[[package]]
 name = "zipp"
 version = "3.17.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -4700,4 +4710,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "3.10.2"
-content-hash = "b8d7b296665dec66e0ef664c116af624c502636d6f0e3e4e45e422c1ab4a9452"
+content-hash = "da18efa7557da99d540426c59551e727a4eaa23a85f4da8b7a17f9e625edbc0c"

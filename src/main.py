@@ -1,6 +1,8 @@
 from data_extraction.run_extraction import run_extraction
 from data_analysis.run_analysis import run_analysis
 
+from config import paths
+
 from argparse import ArgumentParser
 
 from os import listdir
@@ -17,13 +19,9 @@ def get_description(path: str) -> str:
     
 if __name__ == "__main__":
     
-    description_path = './attributes/description.txt'
-    data_analysis_description_path = './attributes/data_analysis_description.txt' 
-    data_extraction_description_path = './attributes/data_extraction_description.txt'
-
-    program_description = get_description(path=description_path)
-    data_analysis_description = get_description(path=data_analysis_description_path)
-    data_extraction_description = get_description(path=data_extraction_description_path)
+    program_description = get_description(path=paths.description_path)
+    data_analysis_description = get_description(path=paths.data_analysis_description_path)
+    data_extraction_description = get_description(path=paths.data_extraction_description_path)
     
     notebook_directory = './data_analysis/notebooks'
     available_notebooks = [file for file in listdir(notebook_directory) if file.endswith('.ipynb')]

@@ -4,10 +4,11 @@ from subprocess import (
 
 from os import path
 
+from config import paths
+
 def run_analysis(notebook_file_name: str):
     
-    notebook_folder_path = './data_analysis/notebooks/'
-    notebook_file_path = notebook_folder_path + notebook_file_name
+    notebook_file_path = paths.notebook_folder_path + notebook_file_name
     
     try:
         if not path.exists(notebook_file_path):

@@ -10,16 +10,18 @@ from data_extraction.feature_extraction import feature_extraction
 
 from numpy import ndarray
 
-folder_path = '../foto/'
-used_photo_file = folder_path + 'used_photo.txt'
+from config import paths
+
+foto_folder_path = paths.foto_folder_path
+used_photo_file = paths.used_photo_file
 
 def run_extraction():
 
     new_photos_found = False
 
-    for filename in listdir(folder_path):
+    for filename in listdir(foto_folder_path):
         if filename.endswith(file_types):
-            file_path = path.join(folder_path, filename)
+            file_path = path.join(foto_folder_path, filename)
             img, new_photo_flag = read_image_and_write(file_path, used_photo_file)
             if type(img) == ndarray: feature_extraction(image=img, image_name=filename)
             if new_photo_flag: new_photos_found = True
