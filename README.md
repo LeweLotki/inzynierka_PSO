@@ -12,31 +12,17 @@
 
 <b>Install poetry:<b>
 <br>
-<code>
-    pip install pipx
-    pipx install poetry
-</code>
-
-<b>build dependencies:<b>
-<br>
-<code>
-    poetry install
-</code>
+<code>pip install pipx
+    pipx install poetry</code>
 
 <b>Build dependencies:<b>
 <br>
-<code>
-    poetry install
-</code>
+<code>poetry install</code>
 
 <b>Activate virtual environment:<b>
 <br>
-<code>
-    poetry shell
-</code>
+<code>poetry shell</code>
 
 <b>Display program description:<b>
 <br>
-<code>
-    python src/main.py --help
-</code>
+<code>python src/main.py --help</code>
