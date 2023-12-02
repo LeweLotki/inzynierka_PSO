@@ -114,6 +114,7 @@ torchvision = "^0.16.1"
 tensorflow-hub = "^0.15.0"
 segment-anything = {git = "https://github.com/facebookresearch/segment-anything.git"}
 ypstruct = "^0.0.2"
+seaborn = "^0.13.0"
 
 [tool.poetry.dev-dependencies]
 
