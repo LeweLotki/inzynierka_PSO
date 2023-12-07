@@ -33,4 +33,4 @@
 
 <br>
 
-![Alt text] (density_area.png?raw=true "cost function")
+![density_area](https://github.com/LeweLotki/inzynierka_PSO/assets/68538575/ee109d1e-7482-4d41-bd66-6d53dc42542c)
