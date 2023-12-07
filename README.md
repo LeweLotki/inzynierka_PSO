@@ -33,4 +33,4 @@
 
 <br>
 
-![plot] (density_area.png)
+![Alt text] (density_area.png?raw=true "cost function")
