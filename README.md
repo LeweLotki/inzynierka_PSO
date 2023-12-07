@@ -33,4 +33,4 @@
 
 <br>
 
-![plot] (foto/density_area.png)
+![plot] (density_area.png)
