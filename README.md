@@ -26,3 +26,11 @@
 <b>Display program description:<b>
 <br>
 <code>python src/main.py --help</code>
+
+<br>
+
+### Representation of cost function:
+
+<br>
+
+![plot] (foto/density_area.png)
