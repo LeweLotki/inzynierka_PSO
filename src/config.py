@@ -5,6 +5,8 @@ paths = struct()
 paths.description_path = './attributes/description.txt'
 paths.data_analysis_description_path = './attributes/data_analysis_description.txt' 
 paths.data_extraction_description_path = './attributes/data_extraction_description.txt'
+paths.data_postprocessing_description_path = './attributes/data_postprocessing_description.txt'
+paths.sampling_coef_description_path = './attributes/sampling_coef_description.txt'
 
 paths.notebook_folder_path = './data_analysis/notebooks/'
 

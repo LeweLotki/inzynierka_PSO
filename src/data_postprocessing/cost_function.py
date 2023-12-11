@@ -37,6 +37,7 @@ class cost_function:
         self.__combine_data()
         self.__filter_data()
         self.__get_cost_function()
+        self.__normalize_cost_function()
         self.__write_cost_function()
 
     def __combine_data(self):
@@ -73,28 +74,27 @@ class cost_function:
         zv = kde(vstack([xv.ravel(), yv.ravel()]))
         zv = zv.reshape(xv.shape)
 
-        self.df = DataFrame({'x': xv.ravel(), 'y': yv.ravel(), 'density': zv.ravel()})
+        self.df = DataFrame({'x': xv.ravel(), 'y': yv.ravel(), 'cost': zv.ravel()})
+        
+    def __normalize_cost_function(self):
+        
+        self.df['cost'] *= -1
+        self.df['cost'] = (self.df['cost'] - self.df['cost'].min()) / (self.df['cost'].max() - self.df['cost'].min())
         
     def __write_cost_function(self):
         
-        
-        # def get_next_filename(folder_path, base_filename):
-        # Get a list of all files in the folder
         folder_path = paths.cost_functions_folder_path
         files = [f for f in listdir(folder_path) if path.isfile(path.join(folder_path, f))]
 
-        # Count the number of existing CSV files in the folder
         csv_files = [f for f in files if f.endswith('.csv')]
-        num_existing_files = len(csv_files)
+        file_number = len(csv_files)
 
-        # Determine the next file number
-        if num_existing_files == 0:
-            next_file_number = ''
+        if file_number == 0:
+            file_number = ''
         else:
-            next_file_number = str(num_existing_files + 1)
-
-        # Construct the new filename
-        base_filename = 'cost_function'
-        new_filename = f"{base_filename}{next_file_number}.csv"
+            file_number = str(file_number + 1)
+ 
+        base_filename = folder_path + '/cost_function'
+        new_filename = f"{base_filename}{file_number}.csv"
         
         self.df.to_csv(new_filename, index=False)
