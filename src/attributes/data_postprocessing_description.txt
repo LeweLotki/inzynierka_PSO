@@ -1,0 +1,1 @@
+Combining, filtering, interpolate, sampling and normalizing data to create cost function. Cost functions are save to cost_functions folder as csv files.
