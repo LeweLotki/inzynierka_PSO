@@ -1,0 +1,1 @@
+(-s OPTIONAL) Define metaparameters of PSO algorithm with syntax --weights '(c1, c2, w)'.

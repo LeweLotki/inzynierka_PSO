@@ -51,8 +51,6 @@ class PSO:
     
         self.__get_dataframe()
         self.__get_optimizer()
-        self.train()
-        self.display_convergence()
         
     def __get_dataframe(self):
         

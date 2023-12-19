@@ -1,0 +1,1 @@
+(-s OPTIONAL) Define which cost function you want to use in PSO algorithm training. Cost function are represented by .csv files and are stored in './data_postrocessing/cost_function'.

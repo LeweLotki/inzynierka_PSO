@@ -1,0 +1,1 @@
+Train PSO algorithm on chosen cost function and display resulted simulation and convergence curve.
