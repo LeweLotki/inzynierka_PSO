@@ -71,5 +71,5 @@ if __name__ == "__main__":
             iters=args.iters
         )
         pso.train()
-        pso.display_convergence()
+        pso.display()
     else: default_message()

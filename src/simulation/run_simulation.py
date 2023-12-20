@@ -5,14 +5,11 @@ from numpy import (
 from pandas import (
     DataFrame, read_csv
 )
-from matplotlib.pyplot import (
-    figure, plot, scatter, xlabel,
-    ylabel, title, legend, show
-)
 
 from scipy.spatial import cKDTree
 
 from simulation.GlobalBestPSOWithCallback import GlobalBestPSOWithCallback
+from simulation.visualizer import Visualizer
 from config import paths
 
 class PSO:
@@ -99,30 +96,10 @@ class PSO:
             print("Optimization failed. Make sure the initial swarm has valid positions.")
             print(e)
 
-    def display_convergence(self) -> None:
-        '''display convergence curve'''
-        import matplotlib.pyplot as plt
-        import numpy as np
-        history = array(self.optimizer.cost_history)
+    def display(self) -> None:
 
-        figure(figsize=(8, 6))
-        plot(history, c='r')
-        scatter(range(len(history)), history, c='r', label='Best value')
-        xlabel('Iteration')
-        ylabel('Objective Value')
-        title('Particle Swarm Optimization')
-        legend()
-        show()
+        visualizer = Visualizer(self.particle_positions)
+        # visualizer.display_convergence()
+        # visualizer.display_particle_positions()
+        visualizer.display_particle_positions()
         
-        self.particle_positions = np.vstack(self.particle_positions)
-        fig = plt.figure(figsize=(10, 8))
-        ax = fig.add_subplot(111, projection='3d')
-
-        ax.scatter(self.particle_positions[:, 0], self.particle_positions[:, 1], self.particle_positions[:, 2], c=self.particle_positions[:, 2], cmap='viridis', label='Particles')
-
-        ax.set_xlabel('X-axis')
-        ax.set_ylabel('Y-axis')
-        ax.set_zlabel('Cost')
-        ax.set_title('Particle Motion and Cost in PSO Optimization')
-        ax.legend()
-        plt.show()
