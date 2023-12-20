@@ -1,6 +1,6 @@
 ''''This module is used in visualizer class to display animation'''
 from numpy import (
-    vstack, min, max, array, zeros
+    vstack, min, max, array, zeros, mean
 )
 from matplotlib.pyplot import figure, show
 from matplotlib.animation import FuncAnimation
@@ -17,6 +17,7 @@ class DisplayMotion:
         self.line_convergence, = self.ax_convergence.plot([], [], color='red', label='Convergence Curve')
         self.scatter_point, = self.ax_convergence.plot([], [], 'ro', label='Iteration Best Value')
         self.line_best_values, = self.ax_convergence.plot([], [], color='blue', linestyle='dashed', label='Iteration Best Values')
+        self.line_mean_cost, = self.ax_convergence.plot([], [], color='green', label='Mean cost of population')
         self.ax_motion = self.fig.add_subplot(122, projection='3d')  # Add 3D subplot on the right
         self.sc = None  # Variable to store scatter plot object
         self.animation = None
@@ -66,10 +67,11 @@ class DisplayMotion:
         )
 
         # Update convergence curve and iteration best values in 2D subplot
-        iter_best_values, convergence_curve = self.__get_convergence_curve(frame)
+        iter_best_values, convergence_curve, mean_cost = self.__get_convergence_curve(frame)
         self.line_convergence.set_data(range(frame + 1), convergence_curve)
         self.scatter_point.set_data(frame + 1, iter_best_values[frame])  # +1 to align with 1-based iteration
         self.line_best_values.set_data(range(frame + 1), iter_best_values)
+        self.line_mean_cost.set_data(range(frame + 1), mean_cost)
 
     def __create_animation(self):
         '''Initialize animation of motion'''
@@ -88,9 +90,11 @@ class DisplayMotion:
             return array([]), array([])
 
         iter_best_values = zeros(iters)
+        mean_cost = zeros(iters)
 
         for i, matrix in enumerate(self.particle_positions[:current_frame + 1]):
             iter_best_values[i] = min(matrix[:, 2])
+            mean_cost[i] = mean(matrix[:, 2])
 
         convergence_curve = iter_best_values.copy()
 
@@ -98,9 +102,9 @@ class DisplayMotion:
             if convergence_curve[i] > convergence_curve[i - 1]:
                 convergence_curve[i] = convergence_curve[i - 1]
 
-        return iter_best_values, convergence_curve
+        return iter_best_values, convergence_curve, mean_cost
 
     def __set_ylim(self):
         # Compute overall min and max of iter_best_values
-        all_iter_best_values = array([min(matrix[:, 2]) for matrix in self.particle_positions])
-        self.ax_convergence.set_ylim([0, max(all_iter_best_values) * 1.1])
+        all_mean_cost = array([mean(matrix[:, 2]) for matrix in self.particle_positions])
+        self.ax_convergence.set_ylim([0, max(all_mean_cost) * 1.1])
