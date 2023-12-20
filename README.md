@@ -27,6 +27,10 @@
 <br>
 <code>python src/main.py --help</code>
 
+<b>To run simulation of particles motion and display visualization type:<b>
+<br>
+<code>python src/main.py -s</code>
+
 <br>
 
 ### Representation of cost function:
