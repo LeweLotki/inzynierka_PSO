@@ -67,6 +67,6 @@ class Visualizer:
         ax.legend()
         show()
         
-    def display_motion(self):
+    def display_motion(self, fps=5):
         '''association of DisplayMotion class'''
-        DisplayMotion(self.particle_positions)
+        DisplayMotion(particle_positions=self.particle_positions, fps=fps)

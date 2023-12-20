@@ -33,7 +33,7 @@ class PSO:
     def __init__(
         self, 
         file_path:str='cost_function.csv', 
-        options:str='(0.5, 0.3, 0.9)', 
+        options:str='(0.09, 0.01, 0.09)', 
         n_particles:int=100, 
         iters:int=15
         ):
@@ -96,10 +96,10 @@ class PSO:
             print("Optimization failed. Make sure the initial swarm has valid positions.")
             print(e)
 
-    def display(self) -> None:
-
+    def display(self, fps=5) -> None:
+        '''association of Visualizer class'''
         visualizer = Visualizer(self.particle_positions)
         # visualizer.display_convergence()
         # visualizer.display_particle_positions()
-        visualizer.display_particle_positions()
+        visualizer.display_motion(fps=fps)
         
