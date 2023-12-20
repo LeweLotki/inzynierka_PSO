@@ -9,8 +9,10 @@ from matplotlib.pyplot import (
     figure, plot, scatter, xlabel,
     ylabel, title, legend, show
 )
-from pyswarms.single import GlobalBestPSO
-from scipy.interpolate import griddata
+
+from scipy.spatial import cKDTree
+
+from simulation.GlobalBestPSOWithCallback import GlobalBestPSOWithCallback
 from config import paths
 
 class PSO:
@@ -26,8 +28,10 @@ class PSO:
         )
     optimzier = None
     objective_values = None
+    particle_positions = None
     dimensions = 2
     df = DataFrame()
+    tree = None 
     
     def __init__(
         self, 
@@ -64,43 +68,41 @@ class PSO:
         self.bounds[0][1] = y_column.min()
         self.bounds[1][1] = y_column.max()
         
+        self.tree = cKDTree(self.df[['x', 'y']].values)
+        
     def __objective_function(self, positions) -> ndarray:
-        
-        x_values = positions[:, 0]
-        y_values = positions[:, 1]
+    
+        _, indices = self.tree.query(positions, k=1)
 
-        x_column = self.df['x'].values
-        y_column = self.df['y'].values
-        cost_column = self.df['cost'].values
-        
-        objective_values = griddata(
-            (x_column, y_column),
-            cost_column,
-            (x_values, y_values),
-            method='linear'
-            )
-        
-        return objective_values
+        if type(indices) == ndarray: 
+            indices.flatten()
+
+        closest_cost_values = self.df['cost'].values[indices]
+
+        return closest_cost_values
 
     def __get_optimizer(self) -> None: 
     
-        self.optimizer = GlobalBestPSO(
+        self.optimizer = GlobalBestPSOWithCallback(
             n_particles=self.n_particles, 
             dimensions=self.dimensions, 
             options=self.options, 
-            bounds=self.bounds
+            bounds=self.bounds,
+            callback=lambda particle_positions:None
             )
 
     def train(self) -> None:
         '''train PSO algorithm'''
         try:
-            self.optimizer.optimize(self.__objective_function, iters=self.iters)
+            _, _, self.particle_positions = self.optimizer.optimize(self.__objective_function, iters=self.iters)
         except ValueError as e:
             print("Optimization failed. Make sure the initial swarm has valid positions.")
             print(e)
 
     def display_convergence(self) -> None:
         '''display convergence curve'''
+        import matplotlib.pyplot as plt
+        import numpy as np
         history = array(self.optimizer.cost_history)
 
         figure(figsize=(8, 6))
@@ -111,3 +113,16 @@ class PSO:
         title('Particle Swarm Optimization')
         legend()
         show()
+        
+        self.particle_positions = np.vstack(self.particle_positions)
+        fig = plt.figure(figsize=(10, 8))
+        ax = fig.add_subplot(111, projection='3d')
+
+        ax.scatter(self.particle_positions[:, 0], self.particle_positions[:, 1], self.particle_positions[:, 2], c=self.particle_positions[:, 2], cmap='viridis', label='Particles')
+
+        ax.set_xlabel('X-axis')
+        ax.set_ylabel('Y-axis')
+        ax.set_zlabel('Cost')
+        ax.set_title('Particle Motion and Cost in PSO Optimization')
+        ax.legend()
+        plt.show()
