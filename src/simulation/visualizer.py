@@ -1,6 +1,6 @@
 '''Definition of Visualizer class'''
 from numpy import (
-    array, vstack, min, zeros
+    array, vstack, min, zeros, mean
 )
 from matplotlib.pyplot import (
     figure, plot, scatter, xlabel,
@@ -23,9 +23,11 @@ class Visualizer:
             return array([])
         
         iter_best_values = zeros(iters)
+        mean_cost = zeros(iters)
         
         for i, matrix in enumerate(self.particle_positions):
             iter_best_values[i] = min(matrix[:, 2])
+            mean_cost[i] = mean(matrix[:, 2])
 
         convergence_curve = iter_best_values.copy()
         
@@ -33,18 +35,19 @@ class Visualizer:
             if convergence_curve[i] > convergence_curve[i - 1]:
                 convergence_curve[i] = convergence_curve[i - 1]
         
-        return (iter_best_values, convergence_curve)
+        return (iter_best_values, convergence_curve, mean_cost)
         
     def display_convergence(self):
         '''display convergence curve'''
 
-        iter_best_values, convergence_curve = self.__get_convergence_curve()
+        iter_best_values, convergence_curve, mean_cost = self.__get_convergence_curve()
 
         figure(figsize=(8, 6))
         plot(convergence_curve, color='red')
         scatter(range(convergence_curve.shape[0]), convergence_curve, c='r', label='convergence curve')
         plot(iter_best_values, color='blue', linestyle='dashed')
         scatter(range(iter_best_values.shape[0]), iter_best_values, c='b', label='iteration best value')
+        plot(mean_cost, color='green')
         xlabel('Iteration')
         ylabel('Objective Value')
         title('Particle Swarm Optimization')
@@ -54,11 +57,12 @@ class Visualizer:
     def display_particle_positions(self):
         '''display position of each particle on 3D scatter plot'''
         
-        self.particle_positions = vstack(self.particle_positions)
+        particle_positions = self.particle_positions
+        particle_positions = vstack(particle_positions)
         fig = figure(figsize=(10, 8))
         ax = fig.add_subplot(111, projection='3d')
 
-        ax.scatter(self.particle_positions[:, 0], self.particle_positions[:, 1], self.particle_positions[:, 2], c=self.particle_positions[:, 2], cmap='viridis', label='Particles')
+        ax.scatter(particle_positions[:, 0], particle_positions[:, 1], particle_positions[:, 2], c=particle_positions[:, 2], cmap='viridis', label='Particles')
 
         ax.set_xlabel('X-axis')
         ax.set_ylabel('Y-axis')

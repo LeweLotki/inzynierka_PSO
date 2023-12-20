@@ -35,7 +35,7 @@ class PSO:
         file_path:str='cost_function.csv', 
         options:str='(0.09, 0.01, 0.09)', 
         n_particles:int=100, 
-        iters:int=15
+        iters:int=100
         ):
         
         try:

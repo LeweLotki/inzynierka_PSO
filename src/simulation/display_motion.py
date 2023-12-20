@@ -12,29 +12,26 @@ class DisplayMotion:
         self.fps = fps
         
         self.particle_positions = particle_positions
-        self.fig = figure(figsize=(15, 8))  # Increase the figure size
-        self.ax_convergence = self.fig.add_subplot(121)  # Add 2D subplot on the left for convergence curve
+        self.fig = figure(figsize=(15, 8))  
+        self.ax_convergence = self.fig.add_subplot(121)  
         self.line_convergence, = self.ax_convergence.plot([], [], color='red', label='Convergence Curve')
         self.scatter_point, = self.ax_convergence.plot([], [], 'ro', label='Iteration Best Value')
         self.line_best_values, = self.ax_convergence.plot([], [], color='blue', linestyle='dashed', label='Iteration Best Values')
         self.line_mean_cost, = self.ax_convergence.plot([], [], color='green', label='Mean cost of population')
-        self.ax_motion = self.fig.add_subplot(122, projection='3d')  # Add 3D subplot on the right
-        self.sc = None  # Variable to store scatter plot object
+        self.ax_motion = self.fig.add_subplot(122, projection='3d')  
+        self.sc = None  
         self.animation = None
 
-        # Determine dynamic xlim, ylim, and zlim
         all_positions = vstack(self.particle_positions)
         self.ax_motion.set_xlim([min(all_positions[:, 0]), max(all_positions[:, 0])])
         self.ax_motion.set_ylim([min(all_positions[:, 1]), max(all_positions[:, 1])])
         self.ax_motion.set_zlim([min(all_positions[:, 2]), max(all_positions[:, 2])])
 
-        # Set isometric view
         self.ax_motion.view_init(elev=30, azim=45)
-        
-          # Set dynamic xlim for convergence plot
+         
         iters = len(self.particle_positions)
-        self.ax_convergence.set_xlim([1, iters])  # Set xlim from 1 to the number of iterations
-        self.__set_ylim()  # Dynamically set ylim based on overall min and max of iter_best_values
+        self.ax_convergence.set_xlim([1, iters])  
+        self.__set_ylim()  
 
         self.ax_motion.set_xlabel('X-axis')
         self.ax_motion.set_ylabel('Y-axis')
@@ -55,7 +52,6 @@ class DisplayMotion:
         if self.sc is not None:
             self.sc.remove()
 
-        # Plot the current frame in 3D subplot
         particle_positions = vstack(self.particle_positions[frame])
         self.sc = self.ax_motion.scatter(
             particle_positions[:, 0],
@@ -66,10 +62,9 @@ class DisplayMotion:
             label='Particles'
         )
 
-        # Update convergence curve and iteration best values in 2D subplot
         iter_best_values, convergence_curve, mean_cost = self.__get_convergence_curve(frame)
         self.line_convergence.set_data(range(frame + 1), convergence_curve)
-        self.scatter_point.set_data(frame + 1, iter_best_values[frame])  # +1 to align with 1-based iteration
+        self.scatter_point.set_data(frame + 1, iter_best_values[frame])  
         self.line_best_values.set_data(range(frame + 1), iter_best_values)
         self.line_mean_cost.set_data(range(frame + 1), mean_cost)
 
@@ -87,7 +82,7 @@ class DisplayMotion:
     def __get_convergence_curve(self, current_frame):
         iters = current_frame + 1
         if iters == 0:
-            return array([]), array([])
+            return array([]), array([]), array([])
 
         iter_best_values = zeros(iters)
         mean_cost = zeros(iters)
@@ -105,6 +100,6 @@ class DisplayMotion:
         return iter_best_values, convergence_curve, mean_cost
 
     def __set_ylim(self):
-        # Compute overall min and max of iter_best_values
+        
         all_mean_cost = array([mean(matrix[:, 2]) for matrix in self.particle_positions])
         self.ax_convergence.set_ylim([0, max(all_mean_cost) * 1.1])
