@@ -71,5 +71,5 @@ if __name__ == "__main__":
             iters=args.iters
         )
         pso.train()
-        pso.display(fps=5)
+        pso.display(fps=10)
     else: default_message()

@@ -5,4 +5,5 @@ __pycache__/
 .ipynb_checkpoints/
 src/models/SAM/
 .vscode/
-density_area.png
+*.png
+*.mp4

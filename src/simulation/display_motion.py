@@ -45,6 +45,7 @@ class DisplayMotion:
         self.ax_convergence.legend()
         
         self.__create_animation()
+        self.__save_animation() #TODO
 
     def __update_frame(self, frame):
         '''Iterate through list of matrixes to scatter position of particles'''
@@ -78,6 +79,15 @@ class DisplayMotion:
             repeat=False
         )
         show()
+        
+    def __save_animation(self):
+        
+        self.animation.save(
+            'particle_motion.mp4', 
+            writer='ffmpeg', fps=self.fps, 
+            extra_args=['-vcodec', 'libx264']
+            )
+
         
     def __get_convergence_curve(self, current_frame):
         iters = current_frame + 1
